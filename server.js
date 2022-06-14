@@ -29,4 +29,26 @@ const server = app.listen(port, ()=>{
     console.log(`server running at port ${port}`)
 })
 
+// Function to GET Project Data
+const getData = async () => {
+    const dataRequestDetails = await fetch('/submit');  
+    // https://weather.com/submit
+
+    try{
+        // Convert data from dataRequestDetails to JSON
+        const dataResponseJson = dataRequestDetails.request.json();
+        console.log(dataResponseJson);
+
+
+        // Update DOM elements
+        document.querySelector("#date").innerHTML = new Date().toISOString().slice(0, 10);
+        document.querySelector("#temp").innerHTML = dataResponseJson.main.temp;
+        document.querySelector("#content").innerHTML = dataResponseJson.main.feel;
+
+    } catch(error) {
+        console.log(error);
+        // handle whatever the error is...
+    }
+}
+
 
