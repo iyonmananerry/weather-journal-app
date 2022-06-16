@@ -29,28 +29,18 @@ const server = app.listen(port, ()=>{
     console.log(`server running at port ${port}`)
 })
 
-// Function to GET Project Data
-const getData = async () => {
-    const dataRequestDetails = await fetch('/submit');  
-    // https://weather.com/submit
 
-    try{
-        // Convert data from dataRequestDetails to JSON
-        const dataResponseJson = dataRequestDetails.request.json();
-        console.log(dataResponseJson);
+app.get('/get_project_data_details', (request, response) => {
+    // http://localhost:8080/get_project_data_details
+    response.send(projectData);
 
+})
 
-        // Update DOM elements
-        document.querySelector("#date").innerHTML = new Date().toISOString().slice(0, 10);
-        document.querySelector("#temp").innerHTML = dataResponseJson.main.temp;
-        document.querySelector("#content").innerHTML = dataResponseJson.main.feel;
-
-    } catch(error) {
-        console.log(error);
-        // handle whatever the error is...
-    }
-}
-
-
-
-
+app.post('/post_url', (request, response) => {
+    // console.log(request)
+    projectData['temperature'] = request.body.temp;
+    projectData['date'] = new Date().toISOString().slice(0, 10);
+    projectData['feeling'] = request.body.feels_like;
+    projectData['name'] = request.name;
+    response.send({'status': 200});
+}) 

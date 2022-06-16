@@ -15,66 +15,28 @@ async function getWeatherData(){
     return response.json();
     
 }
-
-
-// Function to GET Project Data
-const getData = async () => {
-    const dataRequestDetails = await fetch('/submit');  
-    // https://weather.com/submit
-
-    try{
-        // Convert data from dataRequestDetails to JSON
-        const dataResponseJson = dataRequestDetails.request.json();
-        console.log(dataResponseJson);
-
-
-        // Update DOM elements
-        document.querySelector("#date").innerHTML = new Date().toISOString().slice(0, 10);
-        document.querySelector("#temp").innerHTML = dataResponseJson.main.temp;
-        document.querySelector("#content").innerHTML = dataResponseJson.main.feel;
-
-    } catch(error) {
-        console.log(error);
-        // handle whatever the error is...
-    }
-}
-
-
-
-const postData = async (url=" ", data = {}) =>{
-    const response = await fetch(url, {
-    method: 'POST',
-    credentials: 'same-origin',
-    headers: {
-        'Content-type': 'application/json',
-    },
-    body: JSON.stringify(data)
-    })
-
-    try {
-        const responseJsonFromPostRequest = await response.json();
-        return responseJsonFromPostRequest;
-    } catch(error) {console.log(error);};
-
-}
-       
+    
 
 generateBtn.addEventListener("click", async () => {
-        // get the zipcode from the zip user input 
-        // send to open weather for processing 
+    openweather_data = await getWeatherData();
+    await fetch(
+        '/post_url',
+         {
+            method: "POST",
+            credentials: "same-origin",
+            headers: new Headers({
+                'content-type': 'applicaton/json',
+            }),
+            body: JSON.stringify(openweather_data),
+        }
+        );
 
-        // result = await getWeatherData();
-        // // display result from open weather at result div 
-        // date.innerText = todaysDate;
-        // temp.innerText = result.main.temp + "°F";
-        // content.innerText = feelings.value;
+    postData_details = await fetch('/get_project_data_details', {method: "GET"});
+    
+    document.querySelector("#date").innerHTML = postData_details.date;
+    document.querySelector("#temp").innerHTML = postData_details.temp;
+    document.querySelector("#content").innerHTML = postData_details.feel;
 
-
-        postData('/submit', data={
-            response: getWeatherData(),
-        })
-        getData();
-        
-    }
+}
 )
 
