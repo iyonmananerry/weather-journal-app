@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Initialize the main project folder
-app.use(express.static('website'));
+app.use(express.static('weather-journal-app/website'));
 
 
 //set up server //
@@ -50,5 +50,7 @@ const getData = async () => {
         // handle whatever the error is...
     }
 }
+
+
 
 
