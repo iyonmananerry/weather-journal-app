@@ -1,11 +1,6 @@
 let zipCode = document.querySelector("#zip");
 const generateBtn = document.querySelector("#generate");
-let result = ""
-const date = document.querySelector("#date");
-const temp = document.querySelector("#temp");
-const content = document.querySelector("#content");
 const feelings = document.querySelector("#feelings");
-const todaysDate = new Date().toISOString().slice(0, 10)
 const myApi = {
     key: "878ee3568330f958b4861f25389385d8",
     base: "https://api.openweathermap.org/data/2.5/"
@@ -15,28 +10,34 @@ async function getWeatherData(){
     return response.json();
     
 }
-    
 
 generateBtn.addEventListener("click", async () => {
     openweather_data = await getWeatherData();
+    weather_data =  {
+        'date': new Date().toISOString().slice(0, 10),
+        'temperature': openweather_data.main.temp,
+        'name': openweather_data.name,
+        'feelings': feelings.value,
+    }
     await fetch(
         '/post_url',
          {
             method: "POST",
             credentials: "same-origin",
             headers: new Headers({
-                'content-type': 'applicaton/json',
+                'content-type': 'application/json',
             }),
-            body: JSON.stringify(openweather_data),
+            body: JSON.stringify(weather_data),
         }
         );
 
-    postData_details = await fetch('/get_project_data_details', {method: "GET"});
+    getData = await fetch('/get_project_data_details', {method: "GET"});
+    getDataDetails = await getData.json();
     
-    document.querySelector("#date").innerHTML = postData_details.date;
-    document.querySelector("#temp").innerHTML = postData_details.temp;
-    document.querySelector("#content").innerHTML = postData_details.feel;
-
+    document.querySelector("#date").innerHTML = getDataDetails.date;
+    document.querySelector("#temp").innerHTML = getDataDetails.temperature;
+    document.querySelector("#feelings-content").innerHTML = getDataDetails.feelings;
+    document.querySelector("#location").innerHTML = getDataDetails.name;
 }
 )
 

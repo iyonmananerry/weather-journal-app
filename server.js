@@ -32,15 +32,16 @@ const server = app.listen(port, ()=>{
 
 app.get('/get_project_data_details', (request, response) => {
     // http://localhost:8080/get_project_data_details
-    response.send(projectData);
-
+    stringified_projectData = JSON.stringify(projectData);
+    response.send(stringified_projectData);
 })
 
 app.post('/post_url', (request, response) => {
     // console.log(request)
-    projectData['temperature'] = request.body.temp;
-    projectData['date'] = new Date().toISOString().slice(0, 10);
-    projectData['feeling'] = request.body.feels_like;
-    projectData['name'] = request.name;
-    response.send({'status': 200});
+    projectData['temperature'] = request.body.temperature;
+    projectData['date'] = request.body.date;
+    projectData['feelings'] = request.body.feelings;
+    projectData['name'] = request.body.name;
+
+    response.send({"status":200});
 }) 
